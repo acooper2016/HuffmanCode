@@ -9,10 +9,15 @@ import java.lang.Comparable;
 */
 public class HuffmanNode implements Comparable<HuffmanNode>
 {
-	private char character;
+	private String character;
 	private int count;
 	private HuffmanNode right;
 	private HuffmanNode left;
+	
+	
+	public HuffmanNode()
+	{
+	}
 	
 	/**
 	*Constructs a HuffmanNode with a predefined character and count value.
@@ -20,9 +25,9 @@ public class HuffmanNode implements Comparable<HuffmanNode>
 	*@param c Character of new Node
 	*@param val Count of new Node
 	*/
-	public HuffmanNode(char c, int val)
+	public HuffmanNode(String s, int val)
 	{
-		character = c;
+		character = s;
 		count = val;	
 	}
 	
@@ -61,9 +66,9 @@ public class HuffmanNode implements Comparable<HuffmanNode>
 	*
 	*@param c new character 
 	*/
-	public void setChar(char c)
+	public void setChar(String s)
 	{
-		character = c;
+		character = s;
 	}
 	
 	/**
@@ -71,7 +76,7 @@ public class HuffmanNode implements Comparable<HuffmanNode>
 	*
 	*@return Node's character value
 	*/
-	public char getCharacter()
+	public String getCharacter()
 	{
 		return character;
 	}	
@@ -114,5 +119,13 @@ public class HuffmanNode implements Comparable<HuffmanNode>
 		return this.getCount() - n.getCount();
 	}
 	
+	public boolean isLeaf()
+	{
+		if(left == null && right == null)
+		{
+			return true;
+		}
+		else return false;
+	}
 	
 }
