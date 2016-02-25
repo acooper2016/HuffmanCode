@@ -128,4 +128,8 @@ public class HuffmanNode implements Comparable<HuffmanNode>
 		else return false;
 	}
 	
+	public String toString()
+	{
+		return "" + character + count;
+	}
 }

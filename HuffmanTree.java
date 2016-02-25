@@ -6,7 +6,15 @@ import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.Iterator;
 
-public class HuffmanTree
+/**
+*Program that creates efficient encoded strings of characters.  Using a Binary Tree as the structure for the encoding algorithm,
+*More common characters are stored in less space, while less common characters are stored in more space.
+*
+*@version 1.0
+*@author Aaron Cooper
+*/
+
+public class HuffmanTree implements Iterable<String>
 {
 	//Root of the HuffmanTree
 	private HuffmanNode root;
@@ -18,11 +26,23 @@ public class HuffmanTree
 	
 	public static void main(String [] args)
 	{
-		String key = "The quick brown fox jumped over the lazy dog, THE QUICK BROWN FOX JUMPED OVER THE LAZY DOG.";
+		String key = "the quick brown fox jumps over the lazy dog...!?!?";
 		HuffmanTree rosetta = new HuffmanTree(key);
+		String s = rosetta.encode("abcdefg");
+		System.out.println(rosetta.decode(s));
 		
-		String s = rosetta.encode("Horse manure");
-		System.out.println(s);
+		
+		
+	}
+	
+	/**
+	*Returns the root of the HuffmanTree
+	*
+	*@return root of the HuffmanTree
+	*/
+	public HuffmanNode getRoot()
+	{
+		return root;
 	}
 	
 	/**
@@ -110,6 +130,10 @@ public class HuffmanTree
 	*/
 	public String encode(String s)
 	{
+		if(! encodable(s))
+		{
+			throw new NullPointerException("String contains character not in HuffmanTree");
+		}
 		String codeString = "";
 		for(int i = 0; i < s.length(); i++)
 		{
@@ -128,23 +152,30 @@ public class HuffmanTree
 	{
 		String charString = "";
 		HuffmanNode branch = root;
-		while(!branch.isLeaf())
+		int l = branch.getCharacter().length();
+		while(l != 1)
 		{
 			String leftString = branch.getLeft().getCharacter();
 			String rightString = branch.getRight().getCharacter();
+			boolean isLeft = false;
 			for(int i = 0; i < leftString.length(); i++)
 			{
 				if(c == leftString.charAt(i))
 				{
-					charString += "0";
-					branch = branch.getLeft();	
+					isLeft = true;
 				}
-				else
-				{
-					charString += "1";
-					branch = branch.getRight();
-				}
-			}	
+			}
+			if(isLeft)
+			{
+				charString += "0";
+				branch = branch.getLeft();
+			}
+			else
+			{
+				charString += "1";
+				branch = branch.getRight();
+			}
+			l = branch.getCharacter().length();	
 		}
 		return charString;	
 	}
@@ -160,6 +191,7 @@ public class HuffmanTree
 	public String decode(String s)
 	{
 		String decodedString = "";
+		s = s + (s.charAt(s.length() - 1));
 		HuffmanNode branch = root;
 		while(s.length() > 0)
 		{
@@ -186,7 +218,49 @@ public class HuffmanTree
 	*
 	*@return String representation of HuffmanTree
 	*/
-	//public String toString
+	public String toString()
+	{
+		Iterator<String> i = iterator();
+		String s = "";
+		while(i.hasNext())
+		{
+			s += i.next(); 
+		}
+		return s;
+		
+	}
+	
+	/**
+	*Returns an iterator that returns each Node in the tree in String form inorder.
+	*
+	*@return Iterator of all nodes in Tree
+	*/
+	public Iterator<String> iterator()
+	{
+		return new HuffmanIterator(this);
+	}
+	
+	/**
+	*Returns whether or not a given String is encodable by this HuffmanTree
+	*
+	*@param s String being checked
+	*@return whether or not s is encodable by this HuffmanTree
+	*/
+	public boolean encodable(String s)
+	{
+		for(int i = 0; i < s.length(); i++)
+		{
+			boolean isIn = false;
+			for(int j = 0; j < charSet.length(); j++)
+			{
+				if(s.charAt(i) == charSet.charAt(j))
+					isIn = true;
+			}
+			if (isIn == false)
+				return false;
+		}
+		return true;
+	}
 	
 	
 	

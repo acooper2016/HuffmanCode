@@ -1,5 +1,10 @@
 import java.util.Iterator;
-
+/**
+*Iterator for a HuffmanTree.  Uses inorder algorithm to convert a tree into a linear List of Strings.
+*
+*@version 1.0
+*@author Aaron Cooper
+*/
 public class HuffmanIterator implements Iterator
 {
 	private Queue order;
@@ -12,11 +17,11 @@ public class HuffmanIterator implements Iterator
 	*@return new inorder iterator
 	*@param root Binary tree that is the root of the contents of the iterator
 	*/
-	public HuffmanIterator(HuffmanTree root)
+	public HuffmanIterator(HuffmanTree tree)
 	{
 		index = 0;
 		order = new LinkedList<String>();
-		getOrder(root, order);
+		getOrder(tree.getRoot(), order);
 	}
 	
 	/**
@@ -25,24 +30,24 @@ public class HuffmanIterator implements Iterator
 	*@param branch current tree being added recursively
 	*@param order current contents of Linked List
 	*/
-	private void getOrder(HuffmanTree branch, Queue order)
+	private void getOrder(HuffmanNode branch, Queue order)
 	{
 		if(branch.isLeaf())
-			order.offer("" + branch.getValue());
+			order.offer("" + branch.getCharacter() + branch.getCount());
 		else if(branch.getRight() == null)
 		{
 			getOrder(branch.getLeft(), order);
-			order.offer(branch.getValue());			
+			order.offer("" + branch.getCharacter() + branch.getCount());			
 		}
 		else if(branch.getLeft() == null)
 		{
-			order.offer(branch.getValue());
+			order.offer("" + branch.getCharacter() + branch.getCount());
 			getOrder(branch.getRight(), order);		
 		}	
 		else
 		{
 			getOrder(branch.getLeft(), order);
-			order.offer(branch.getValue());
+			order.offer("" + branch.getCharacter() + branch.getCount());
 			getOrder(branch.getRight(), order);
 		}
 	}
@@ -65,8 +70,8 @@ public class HuffmanIterator implements Iterator
 	*
 	*@return next value
 	*/
-	public E next()
+	public String next()
 	{
-		return order.poll();
+		return "" + order.poll();
 	}
 }
